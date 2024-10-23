@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require" //nolint:all
 )
 
 func TestUnpack(t *testing.T) {
@@ -27,7 +27,6 @@ func TestUnpack(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		tc := tc
 		t.Run(tc.input, func(t *testing.T) {
 			result, err := Unpack(tc.input)
 			require.NoError(t, err)
@@ -42,10 +41,9 @@ func TestUnpackInvalidString(t *testing.T) {
 		"45",
 		"aaa10b",
 		// uncomment if task with asterisk completed
-		//"\345",
+		// "\345",
 	}
 	for _, tc := range invalidStrings {
-		tc := tc
 		t.Run(tc, func(t *testing.T) {
 			_, err := Unpack(tc)
 			require.Truef(t, errors.Is(err, ErrInvalidString), "actual error %q", err)
