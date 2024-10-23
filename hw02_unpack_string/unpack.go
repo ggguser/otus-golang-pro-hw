@@ -49,7 +49,12 @@ func Unpack(s string) (string, error) {
 			if isDigit(symbol) {
 				return "", ErrInvalidString
 			}
-			reps, _ := strconv.Atoi(string(r))
+
+			reps, err := strconv.Atoi(string(r))
+			if err != nil {
+				return "", err
+			}
+
 			packedSymbols = append(packedSymbols, packedSymbol{symbol, reps})
 			seen = true
 		} else {
