@@ -10,12 +10,7 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-func isDigit(r rune) (int, bool) {
-	if d, err := strconv.Atoi(string(r)); err == nil {
-		return d, true
-	}
-	return 0, false
-}
+func isDigit(r rune) bool { return r >= '0' && r <= '9' }
 
 type packedSymbol struct {
 	symbol rune
@@ -44,18 +39,18 @@ func Unpack(s string) (string, error) {
 	slices.Reverse(runes)
 	var seen bool
 	for i, r := range runes {
-		digit, ok := isDigit(r)
-		if ok {
+		if isDigit(r) {
 			if i == len(runes)-1 {
 				return "", ErrInvalidString
 			}
 
 			symbol := runes[i+1]
 
-			if _, ok = isDigit(symbol); ok {
+			if isDigit(symbol) {
 				return "", ErrInvalidString
 			}
-			packedSymbols = append(packedSymbols, packedSymbol{symbol, digit})
+			reps, _ := strconv.Atoi(string(r))
+			packedSymbols = append(packedSymbols, packedSymbol{symbol, reps})
 			seen = true
 		} else {
 			if !seen {
