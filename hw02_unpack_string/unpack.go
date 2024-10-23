@@ -12,6 +12,10 @@ var ErrInvalidString = errors.New("invalid string")
 
 func isDigit(r rune) bool { return r >= '0' && r <= '9' }
 
+func isValid(r []rune) bool {
+	return !isDigit(r[0])
+}
+
 type packedSymbol struct {
 	symbol rune
 	reps   int
@@ -36,14 +40,14 @@ func unpackAndJoin(pss ...packedSymbol) string {
 func Unpack(s string) (string, error) {
 	var packedSymbols []packedSymbol
 	runes := []rune(s)
+	if !isValid(runes) {
+		return "", ErrInvalidString
+	}
+
 	slices.Reverse(runes)
 	var seen bool
 	for i, r := range runes {
 		if isDigit(r) {
-			if i == len(runes)-1 {
-				return "", ErrInvalidString
-			}
-
 			symbol := runes[i+1]
 
 			if isDigit(symbol) {
