@@ -10,16 +10,8 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-func unpackAndJoin(pss ...packedSymbol) string {
-	var sb strings.Builder
-	for _, ps := range pss {
-		sb.WriteString(ps.unpack())
-	}
-	return sb.String()
-}
-
-func isDigit(s string) (int, bool) {
-	if d, err := strconv.Atoi(s); err == nil {
+func isDigit(r rune) (int, bool) {
+	if d, err := strconv.Atoi(string(r)); err == nil {
 		return d, true
 	}
 	return 0, false
@@ -38,13 +30,21 @@ func (p packedSymbol) String() string {
 	return fmt.Sprintf("Symbol: %s, Reps: %d", string(p.symbol), p.reps)
 }
 
+func unpackAndJoin(pss ...packedSymbol) string {
+	var sb strings.Builder
+	for _, ps := range pss {
+		sb.WriteString(ps.unpack())
+	}
+	return sb.String()
+}
+
 func Unpack(s string) (string, error) {
 	var packedSymbols []packedSymbol
 	runes := []rune(s)
 	slices.Reverse(runes)
 	var seen bool
 	for i, r := range runes {
-		digit, ok := isDigit(string(r))
+		digit, ok := isDigit(r)
 		if ok {
 			if i == len(runes)-1 {
 				return "", ErrInvalidString
@@ -52,7 +52,7 @@ func Unpack(s string) (string, error) {
 
 			symbol := runes[i+1]
 
-			if _, ok = isDigit(string(symbol)); ok {
+			if _, ok = isDigit(symbol); ok {
 				return "", ErrInvalidString
 			}
 			packedSymbols = append(packedSymbols, packedSymbol{symbol, digit})
