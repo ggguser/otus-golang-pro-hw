@@ -2,11 +2,21 @@ package hw02unpackstring
 
 import (
 	"errors"
+	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
 
 var ErrInvalidString = errors.New("invalid string")
+
+func unpackAndJoin(pss ...packedSymbol) string {
+	var sb strings.Builder
+	for _, ps := range pss {
+		sb.WriteString(ps.unpack())
+	}
+	return sb.String()
+}
 
 func isDigit(s string) (int, bool) {
 	if d, err := strconv.Atoi(s); err == nil {
@@ -15,29 +25,45 @@ func isDigit(s string) (int, bool) {
 	return 0, false
 }
 
-func Unpack(s string) (string, error) {
-	var unpacked string
-	runes := []rune(s)
-	for i, v := range runes {
-		digit, ok := isDigit(string(v))
-		if ok {
-			if i == 0 {
-				return "", ErrInvalidString
-			}
-			symbol := string(runes[i-1])
+type packedSymbol struct {
+	symbol rune
+	reps   int
+}
 
-			if _, ok = isDigit(symbol); ok {
+func (p packedSymbol) unpack() string {
+	return strings.Repeat(string(p.symbol), p.reps)
+}
+
+func (p packedSymbol) String() string {
+	return fmt.Sprintf("Symbol: %s, Reps: %d", string(p.symbol), p.reps)
+}
+
+func Unpack(s string) (string, error) {
+	var packedSymbols []packedSymbol
+	runes := []rune(s)
+	slices.Reverse(runes)
+	var seen bool
+	for i, r := range runes {
+		digit, ok := isDigit(string(r))
+		if ok {
+			if i == len(runes)-1 {
 				return "", ErrInvalidString
 			}
-			repeated := strings.Repeat(symbol, digit)
-			unpacked += repeated
+
+			symbol := runes[i+1]
+
+			if _, ok = isDigit(string(symbol)); ok {
+				return "", ErrInvalidString
+			}
+			packedSymbols = append(packedSymbols, packedSymbol{symbol, digit})
+			seen = true
 		} else {
-			unpacked += string(v)
+			if !seen {
+				packedSymbols = append(packedSymbols, packedSymbol{r, 1})
+			}
+			seen = false
 		}
 	}
-
-	//utf8.RuneCountInString(repeated)
-	//repeated := strings.Repeat(s, 3)
-
-	return unpacked, nil
+	slices.Reverse(packedSymbols)
+	return unpackAndJoin(packedSymbols...), nil
 }
