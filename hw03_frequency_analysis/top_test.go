@@ -98,3 +98,19 @@ func TestGetWordsCount(t *testing.T) {
 		})
 	}
 }
+
+func TestSortWordsByCount(t *testing.T) {
+	tests := []struct {
+		input    map[string]int
+		expected []string
+	}{
+		{input: map[string]int{"a": 1, "b": 2, "c": 3}, expected: []string{"c", "b", "a"}},
+	}
+	for _, tc := range tests {
+		tc := tc
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := sortWordsByCount(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}

@@ -37,5 +37,6 @@ func sortWordsByCount(wordsCount map[string]int) []string {
 		wordsList = append(wordsList, k)
 	}
 	slices.SortFunc(wordsList, countSort)
+	slices.Reverse(wordsList)
 	return wordsList
 }
