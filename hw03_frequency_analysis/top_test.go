@@ -1,6 +1,7 @@
 package hw03frequencyanalysis
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -79,4 +80,21 @@ func TestTop10(t *testing.T) {
 			require.Equal(t, expected, Top10(text))
 		}
 	})
+}
+
+func TestGetWordsCount(t *testing.T) {
+	tests := []struct {
+		input    []string
+		expected map[string]int
+	}{
+		{input: []string{"a", "a", "a"}, expected: map[string]int{"a": 3}},
+		{input: []string{"a", "b", "c"}, expected: map[string]int{"a": 1, "b": 1, "c": 1}},
+	}
+	for _, tc := range tests {
+		tc := tc
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := getWordsCount(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
 }
