@@ -7,13 +7,18 @@ import (
 )
 
 func Top10(inputStr string) []string {
-	words := strings.Fields(inputStr)
+	words := getWords(inputStr)
 	wordsCount := getWordsCount(words)
 	wordsList := sortWordsByCount(wordsCount)
 	if len(wordsList) > 10 {
 		return wordsList[:9]
 	}
 	return wordsList
+}
+
+func getWords(inputStr string) []string {
+	words := strings.Fields(inputStr)
+	return words
 }
 
 func getWordsCount(wordsList []string) map[string]int {

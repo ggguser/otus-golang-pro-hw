@@ -82,6 +82,22 @@ func TestTop10(t *testing.T) {
 	})
 }
 
+func TestGetWords(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected []string
+	}{
+		{input: "a b   c	d", expected: []string{"a", "b", "c", "d"}},
+	}
+	for _, tc := range tests {
+		tc := tc
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := getWords(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}
+
 func TestGetWordsCount(t *testing.T) {
 	tests := []struct {
 		input    []string
