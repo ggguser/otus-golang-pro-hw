@@ -38,6 +38,6 @@ func sortWordsByCount(wordsCount map[string]int) []string {
 		wordsList = append(wordsList, k)
 	}
 	slices.Sort(wordsList)
-	slices.SortFunc(wordsList, countSort)
+	slices.SortStableFunc(wordsList, countSort)
 	return wordsList
 }
