@@ -116,6 +116,24 @@ func TestGetWordsCount(t *testing.T) {
 	}
 }
 
+func TestGetWordCount(t *testing.T) {
+	tests := []struct {
+		input    []string
+		word     string
+		expected int
+	}{
+		{input: []string{"-", "--"}, word: "-", expected: 1},
+		{input: getWords(text), word: "-", expected: 4},
+	}
+	for _, tc := range tests {
+		tc := tc
+		t.Run(fmt.Sprintf("%v", tc.word), func(t *testing.T) {
+			fullMap := getWordsCount(tc.input)
+			require.Equal(t, tc.expected, fullMap[tc.word])
+		})
+	}
+}
+
 func TestSortWordsByCount(t *testing.T) {
 	tests := []struct {
 		input    map[string]int
