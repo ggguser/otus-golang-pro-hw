@@ -88,6 +88,7 @@ func TestGetWords(t *testing.T) {
 		expected []string
 	}{
 		{input: "a b   c	d", expected: []string{"a", "b", "c", "d"}},
+		{input: "a - b", expected: []string{"a", "-", "b"}},
 	}
 	for _, tc := range tests {
 		tc := tc
@@ -121,6 +122,19 @@ func TestSortWordsByCount(t *testing.T) {
 		expected []string
 	}{
 		{input: map[string]int{"a": 1, "b": 2, "c": 3}, expected: []string{"c", "b", "a"}},
+		{input: map[string]int{"a": 3, "b": 4, "c": 4}, expected: []string{"b", "c", "a"}},
+		{input: map[string]int{
+			"то":        4,
+			"если":      4,
+			"а":         6,
+			"не":        4,
+			"-":         4,
+			"и":         6,
+			"Кристофер": 4,
+			"ты":        5,
+			"что":       5,
+			"он":        8,
+		}, expected: []string{"он", "а", "и", "ты", "что", "-", "Кристофер", "если", "не", "то"}},
 	}
 	for _, tc := range tests {
 		tc := tc
