@@ -24,7 +24,7 @@ func getWords(inputStr string) []string {
 func getWordsCount(wordsList []string) map[string]int {
 	wordsCount := make(map[string]int)
 	for _, word := range wordsList {
-		wordsCount[word] += 1
+		wordsCount[word]++
 	}
 	return wordsCount
 }

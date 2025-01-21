@@ -91,7 +91,6 @@ func TestGetWords(t *testing.T) {
 		{input: "a - b", expected: []string{"a", "-", "b"}},
 	}
 	for _, tc := range tests {
-		tc := tc
 		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
 			result := getWords(tc.input)
 			require.Equal(t, tc.expected, result)
@@ -108,7 +107,6 @@ func TestGetWordsCount(t *testing.T) {
 		{input: []string{"a", "b", "c"}, expected: map[string]int{"a": 1, "b": 1, "c": 1}},
 	}
 	for _, tc := range tests {
-		tc := tc
 		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
 			result := getWordsCount(tc.input)
 			require.Equal(t, tc.expected, result)
@@ -126,7 +124,6 @@ func TestGetWordCount(t *testing.T) {
 		{input: getWords(text), word: "-", expected: 4},
 	}
 	for _, tc := range tests {
-		tc := tc
 		t.Run(fmt.Sprintf("%v", tc.word), func(t *testing.T) {
 			fullMap := getWordsCount(tc.input)
 			require.Equal(t, tc.expected, fullMap[tc.word])
@@ -155,7 +152,6 @@ func TestSortWordsByCount(t *testing.T) {
 		}, expected: []string{"он", "а", "и", "ты", "что", "-", "Кристофер", "если", "не", "то"}},
 	}
 	for _, tc := range tests {
-		tc := tc
 		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
 			result := sortWordsByCount(tc.input)
 			require.Equal(t, tc.expected, result)
