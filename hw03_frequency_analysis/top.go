@@ -11,7 +11,7 @@ func Top10(inputStr string) []string {
 	wordsCount := getWordsCount(words)
 	wordsList := sortWordsByCount(wordsCount)
 	if len(wordsList) > 10 {
-		return wordsList[:9]
+		return wordsList[:10]
 	}
 	return wordsList
 }
@@ -31,17 +31,13 @@ func getWordsCount(wordsList []string) map[string]int {
 
 func sortWordsByCount(wordsCount map[string]int) []string {
 	countSort := func(a, b string) int {
-		if order := cmp.Compare(wordsCount[a], wordsCount[b]); order == 0 {
-			return order
-		} else {
-			return order
-		}
+		return cmp.Compare(wordsCount[a], wordsCount[b]) * -1 // sorting inversion
 	}
 	wordsList := make([]string, 0, len(wordsCount))
 	for k := range wordsCount {
 		wordsList = append(wordsList, k)
 	}
+	slices.Sort(wordsList)
 	slices.SortFunc(wordsList, countSort)
-	slices.Reverse(wordsList)
 	return wordsList
 }
