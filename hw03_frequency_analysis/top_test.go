@@ -1,6 +1,7 @@
 package hw03frequencyanalysis
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -79,4 +80,81 @@ func TestTop10(t *testing.T) {
 			require.Equal(t, expected, Top10(text))
 		}
 	})
+}
+
+func TestGetWords(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected []string
+	}{
+		{input: "a b   c	d", expected: []string{"a", "b", "c", "d"}},
+		{input: "a - b", expected: []string{"a", "-", "b"}},
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := getWords(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func TestGetWordsCount(t *testing.T) {
+	tests := []struct {
+		input    []string
+		expected map[string]int
+	}{
+		{input: []string{"a", "a", "a"}, expected: map[string]int{"a": 3}},
+		{input: []string{"a", "b", "c"}, expected: map[string]int{"a": 1, "b": 1, "c": 1}},
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := getWordsCount(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func TestGetWordCount(t *testing.T) {
+	tests := []struct {
+		input    []string
+		word     string
+		expected int
+	}{
+		{input: []string{"-", "--"}, word: "-", expected: 1},
+		{input: getWords(text), word: "-", expected: 4},
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("%v", tc.word), func(t *testing.T) {
+			fullMap := getWordsCount(tc.input)
+			require.Equal(t, tc.expected, fullMap[tc.word])
+		})
+	}
+}
+
+func TestSortWordsByCount(t *testing.T) {
+	tests := []struct {
+		input    map[string]int
+		expected []string
+	}{
+		{input: map[string]int{"a": 1, "b": 2, "c": 3}, expected: []string{"c", "b", "a"}},
+		{input: map[string]int{"a": 3, "b": 4, "c": 4}, expected: []string{"b", "c", "a"}},
+		{input: map[string]int{
+			"то":        4,
+			"если":      4,
+			"а":         6,
+			"не":        4,
+			"-":         4,
+			"и":         6,
+			"Кристофер": 4,
+			"ты":        5,
+			"что":       5,
+			"он":        8,
+		}, expected: []string{"он", "а", "и", "ты", "что", "-", "Кристофер", "если", "не", "то"}},
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("%v", tc.input), func(t *testing.T) {
+			result := sortWordsByCount(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
 }
