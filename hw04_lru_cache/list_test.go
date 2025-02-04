@@ -15,6 +15,16 @@ func TestList(t *testing.T) {
 		require.Nil(t, l.Back())
 	})
 
+	t.Run("one element", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(1)
+
+		require.Equal(t, 1, l.Len())
+		require.Equal(t, 1, l.Front())
+		require.Equal(t, 1, l.Back())
+	})
+
 	t.Run("complex", func(t *testing.T) {
 		l := NewList()
 
