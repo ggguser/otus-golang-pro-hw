@@ -16,99 +16,105 @@ type ListItem struct {
 	Next  *ListItem
 }
 
-type list struct {
+type DoublyLinkedList struct {
 	count int
 	front *ListItem
 	back  *ListItem
 }
 
 // Len длина списка
-func (l *list) Len() int {
-	return l.count
+func (dll *DoublyLinkedList) Len() int {
+	return dll.count
 }
 
 // Front первый элемент списка
-func (l *list) Front() *ListItem {
-	if l.empty() {
-		return nil
-	}
-	return l.front
+func (dll *DoublyLinkedList) Front() *ListItem {
+	return dll.front
 }
 
 // Back последний элемент списка
-func (l *list) Back() *ListItem {
-	if l.empty() {
-		return nil
-	}
-	return l.back
+func (dll *DoublyLinkedList) Back() *ListItem {
+	return dll.back
 }
 
 // PushFront добавить значение в начало
-func (l *list) PushFront(v interface{}) *ListItem {
+func (dll *DoublyLinkedList) PushFront(v interface{}) *ListItem {
 	newItem := &ListItem{
 		Value: v,
 		Prev:  nil,
-		Next:  l.Front(),
+		Next:  dll.Front(),
 	}
-	l.front.Prev = newItem
-	l.front = newItem
-	l.back = newItem
-	if l.empty() {
-		l.back = newItem
+	if dll.isEmpty() {
+		dll.back = newItem
+		dll.front = newItem
+	} else {
+		dll.front.Prev = newItem
+		dll.front = newItem
 	}
-	l.count++
+	dll.count++
 	return newItem
 }
 
 // PushBack добавить значение в конец
-func (l *list) PushBack(v interface{}) *ListItem {
+func (dll *DoublyLinkedList) PushBack(v interface{}) *ListItem {
 	newItem := &ListItem{
 		Value: v,
-		Prev:  l.Back(),
+		Prev:  dll.Back(),
 		Next:  nil,
 	}
-	l.back.Next = newItem
-	l.front = newItem
-	if l.empty() {
-		l.front = newItem
+	if dll.isEmpty() {
+		dll.back = newItem
+		dll.front = newItem
+	} else {
+		dll.back.Next = newItem
+		dll.back = newItem
 	}
-	l.count++
+	dll.count++
 	return newItem
 }
 
 // Remove удалить элемент
-func (l *list) Remove(i *ListItem) {
+func (dll *DoublyLinkedList) Remove(i *ListItem) {
 	if i == nil {
 		return
 	}
 	if i.Prev != nil {
 		i.Prev.Next = i.Next
 	} else {
-		l.front = l.front.Next
+		dll.front = i.Next
 	}
 	if i.Next != nil {
 		i.Next.Prev = i.Prev
 	} else {
-		l.back = l.back.Prev
+		dll.back = i.Prev
 	}
-	l.count--
+	i.Prev = nil
+	i.Next = nil
+	dll.count--
 }
 
 // MoveToFront переместить элемент в начало
-func (l *list) MoveToFront(i *ListItem) {
-	if l.count == 1 {
+func (dll *DoublyLinkedList) MoveToFront(i *ListItem) {
+	if i == dll.Front() {
 		return
 	}
-	l.Remove(i)
-	l.front.Prev = i
-	i.Next = l.front
-	l.count++
+	dll.Remove(i)
+	i.Prev = nil
+	i.Next = dll.front
+	if dll.Front() != nil {
+		dll.front.Prev = i
+	}
+	dll.front = i
+	if dll.Back() != nil {
+		dll.back = i
+	}
+	dll.count++
 }
 
-func (l *list) empty() bool {
-	return l.Len() <= 0
+func (dll *DoublyLinkedList) isEmpty() bool {
+	return dll.Len() <= 0
 }
 
-func NewList() List {
-	return new(list)
+func NewList() *DoublyLinkedList {
+	return &DoublyLinkedList{}
 }
