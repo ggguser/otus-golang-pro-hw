@@ -1,4 +1,4 @@
-module  github.com/ggguser/otus-golang-pro-hw/hw03_frequency_analysis
+module github.com/ggguser/otus-golang-pro-hw/hw03_frequency_analysis
 
 go 1.22
 
