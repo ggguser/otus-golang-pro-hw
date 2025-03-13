@@ -7,8 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var debug_flag = true
-
 func TestList(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := NewList()
@@ -23,7 +21,6 @@ func TestList(t *testing.T) {
 
 		l.PushFront(1)
 		debug(l)
-
 		require.Equal(t, 1, l.Len())
 		require.Equal(t, 1, l.Front().Value)
 		require.Equal(t, 1, l.Back().Value)
@@ -54,11 +51,8 @@ func TestList(t *testing.T) {
 
 	t.Run("test PushBack", func(t *testing.T) {
 		l := NewList()
-		debug(l)
 		l.PushBack(1)
-		debug(l)
 		l.PushBack(2)
-		debug(l)
 
 		require.Equal(t, 2, l.Len())
 		require.Equal(t, 1, l.Front().Value)
@@ -69,16 +63,12 @@ func TestList(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(10) // [10]
-		debug(l)
-		l.PushBack(20) // [10, 20]
-		debug(l)
-		l.PushBack(30) // [10, 20, 30]
-		debug(l)
+		l.PushBack(20)  // [10, 20]
+		l.PushBack(30)  // [10, 20, 30]
 		require.Equal(t, 3, l.Len())
 
 		middle := l.Front().Next // 20
 		l.Remove(middle)         // [10, 30]
-		debug(l)
 		require.Equal(t, 2, l.Len())
 		require.Equal(t, l.Back(), l.Front().Next)
 		require.Equal(t, l.Front(), l.Back().Prev)
@@ -88,14 +78,10 @@ func TestList(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(3) // [3]
-		debug(l)
 		l.PushFront(2) // [2, 3]
-		debug(l)
 		l.PushFront(1) // [1, 2, 3]
-		debug(l)
 
 		l.Remove(l.Back()) // [1, 2]
-		debug(l)
 		require.Equal(t, 2, l.Len())
 		require.Equal(t, 2, l.Back().Value)
 	})
@@ -104,14 +90,10 @@ func TestList(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(3) // [3]
-		debug(l)
-		l.PushBack(2) // [2, 3]
-		debug(l)
-		l.PushBack(1) // [1, 2, 3]
-		debug(l)
+		l.PushBack(2)  // [2, 3]
+		l.PushBack(1)  // [1, 2, 3]
 
 		l.Remove(l.Front()) // [2, 3]
-		debug(l)
 		require.Equal(t, 2, l.Len())
 		require.Equal(t, l.Front().Value, 2)
 	})
@@ -120,15 +102,11 @@ func TestList(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(3) // [3]
-		debug(l)
-		l.PushBack(2) // [2, 3]
-		debug(l)
-		l.PushBack(1) // [1, 2, 3]
-		debug(l)
+		l.PushBack(2)  // [2, 3]
+		l.PushBack(1)  // [1, 2, 3]
 
 		l.Remove(l.Back())  // [1, 2]
 		l.Remove(l.Front()) // [2]
-		debug(l)
 		require.Equal(t, 1, l.Len())
 		require.Equal(t, l.Back().Value, 2)
 		require.Equal(t, l.Front().Value, 2)
@@ -176,16 +154,12 @@ func TestList(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(10) // [10]
-		debug(l)
-		l.PushBack(20) // [10, 20]
-		debug(l)
-		l.PushBack(30) // [10, 20, 30]
-		debug(l)
+		l.PushBack(20)  // [10, 20]
+		l.PushBack(30)  // [10, 20, 30]
 		require.Equal(t, 3, l.Len())
 
 		middle := l.Front().Next // 20
 		l.Remove(middle)         // [10, 30]
-		debug(l)
 		require.Equal(t, 2, l.Len())
 
 		for i, v := range [...]int{40, 50, 60, 70, 80} {
@@ -229,8 +203,6 @@ func getItems(dll *DoublyLinkedList) []any {
 }
 
 func debug(dll *DoublyLinkedList) {
-	if debug_flag {
-		items := getItems(dll)
-		fmt.Printf("%v — %d\n", items, dll.count)
-	}
+	items := getItems(dll)
+	fmt.Printf("%v — %d\n", items, dll.count)
 }
