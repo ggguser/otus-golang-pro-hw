@@ -95,17 +95,19 @@ func (dll *DoublyLinkedList) Remove(i *ListItem) {
 
 // MoveToFront переместить элемент в начало
 func (dll *DoublyLinkedList) MoveToFront(i *ListItem) {
-	if i == dll.Front() {
+	if i == nil {
+		return
+	}
+	if i == dll.front {
 		return
 	}
 	dll.Remove(i)
-	i.Prev = nil
 	i.Next = dll.front
-	if dll.Front() != nil {
+	if dll.front != nil {
 		dll.front.Prev = i
 	}
 	dll.front = i
-	if dll.Back() != nil {
+	if dll.back == nil {
 		dll.back = i
 	}
 	dll.count++

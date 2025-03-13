@@ -84,20 +84,84 @@ func TestList(t *testing.T) {
 		require.Equal(t, l.Front(), l.Back().Prev)
 	})
 
-	t.Run("test MoveToFront back to front — order", func(t *testing.T) {
+	t.Run("test Remove: case 1 — remove back", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(3) // [3]
+		debug(l)
+		l.PushFront(2) // [2, 3]
+		debug(l)
+		l.PushFront(1) // [1, 2, 3]
+		debug(l)
+
+		l.Remove(l.Back()) // [1, 2]
+		debug(l)
+		require.Equal(t, 2, l.Len())
+		require.Equal(t, 2, l.Back().Value)
+	})
+
+	t.Run("test Remove: case 1 — remove front", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(3) // [3]
+		debug(l)
+		l.PushBack(2) // [2, 3]
+		debug(l)
+		l.PushBack(1) // [1, 2, 3]
+		debug(l)
+
+		l.Remove(l.Front()) // [2, 3]
+		debug(l)
+		require.Equal(t, 2, l.Len())
+		require.Equal(t, l.Front().Value, 2)
+	})
+
+	t.Run("test Remove: case 2 — remove front and back", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(3) // [3]
+		debug(l)
+		l.PushBack(2) // [2, 3]
+		debug(l)
+		l.PushBack(1) // [1, 2, 3]
+		debug(l)
+
+		l.Remove(l.Back())  // [1, 2]
+		l.Remove(l.Front()) // [2]
+		debug(l)
+		require.Equal(t, 1, l.Len())
+		require.Equal(t, l.Back().Value, 2)
+		require.Equal(t, l.Front().Value, 2)
+	})
+
+	t.Run("MoveToFront: case 1 — front to front — order", func(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(3)
 		l.PushFront(2)
 		l.PushFront(1)
-
-		l.MoveToFront(l.Back())
-		require.Equal(t, []any{3, 1, 2}, getItems(l))
-		require.Equal(t, 2, l.Back().Value)
-
+		// [1, 2, 3]
+		l.MoveToFront(l.Front())
+		// [1, 2, 3]
+		require.Equal(t, []any{1, 2, 3}, getItems(l))
+		require.Equal(t, 1, l.Front().Value)
+		require.Equal(t, 3, l.Back().Value)
 	})
 
-	t.Run("test MoveToFront front to front — order", func(t *testing.T) {
+	t.Run("MoveToFront back to front — order", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(3)
+		l.PushFront(2)
+		l.PushFront(1)
+		// [1, 2, 3]
+		l.MoveToFront(l.Back())
+		// [3, 1, 2]
+		require.Equal(t, []any{3, 1, 2}, getItems(l))
+		require.Equal(t, 2, l.Back().Value)
+	})
+
+	t.Run("MoveToFront front to front — order", func(t *testing.T) {
 		l := NewList()
 
 		l.PushFront(3)
